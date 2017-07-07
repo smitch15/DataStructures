@@ -1,82 +1,78 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// node struct holds a value and ptr to nextNode
 struct nodeType{
 	int val;
 	struct nodeType *nodePtr;
 };
 typedef struct nodeType node;
 
+// list struct holds count of nodes and headPtr
 struct linkedListType{
 	node* headPtr;
 	int numNodes;
 };
 typedef struct linkedListType linkedList;
 
+// assign a value to a node and return the node
+// @params int 
+// @return node struct
 node initNode(int valIn){
 	node newNode = {.val = valIn, .nodePtr = NULL};
 	return newNode;
 }
 
-linkedList addNodeEnd(linkedList list, int valIn){
-	if (list.numNodes == 0){
-		node* newNode = (node*) malloc(sizeof(node));
-		newNode->val = valIn;
-		newNode->nodePtr = NULL;
-		list.headPtr = newNode;
-		list.numNodes++;
-	}else{
-		node* newNode = (node*) malloc(sizeof(node));
-		newNode->val = valIn;
-		newNode->nodePtr = NULL;
-		node* curr = list.headPtr;
-		while(curr->nodePtr != NULL){
-			curr = curr->nodePtr;
-		}
-		curr->nodePtr = newNode;
-		list.numNodes++;
-		//node* nextNodePtr = (list.headPtr)->nodePtr; //(node*) malloc(sizeOf(node));
-		//while(nextNodePtr != NULL){
-		//	nextNodePtr = nextNodePtr->nodePtr;
-		//}
-		//nextNodePtr = node0;
-		//node0->nodePtr = NULL;
-		//list.numNodes++;
+// add a node to the end of a list, pass by reference
+// @params linkedList*, int
+// @return void
+void addNodeEnd(linkedList* list, int valIn){
+	node* newNode = (node*) malloc(sizeof(node));
+	newNode->val = valIn;
+	newNode->nodePtr = NULL;
+	//printf("address of newNode: %p, address of headPtr: %p\n", newNode, list->headPtr);
+	//if (list.numNodes == 0)	(list.headPtr)->nodePtr = newNode;
+	node* curr = list->headPtr;
+	while(curr->nodePtr != NULL){
+		curr = curr->nodePtr;
 	}
-	return list;
+	curr->nodePtr = newNode;
+	list->numNodes++;
+	//return list;
 }
 
+// create a list with a head node 
+// @params void
+// @return linkedList struct 
 linkedList initList(){
-	linkedList list = {.numNodes = 0};
-	//node* headNodePtr = (node*) malloc(sizeof(node)); //{.val = 0, .ptr = NULL};
-	//headNodePtr->nodePtr = NULL;
-	//headNodePtr->val = 10;
-	//list = addNodeEnd(list, headNodePtr);
-	list = addNodeEnd(list, 10);
+	linkedList list = {.numNodes = 1};
+	list.headPtr = (node*) malloc(sizeof(node)); //{.val = 0, .ptr = NULL};
+	(list.headPtr)->nodePtr = NULL;
+	(list.headPtr)->val = 10;
 	return list;
 }
 
+// print the list's node values and addresses
+// @params linkedList struct
+// @return void
 void printList(linkedList list){
 	node* curr = list.headPtr;
 	int count = 0;
-	//printf("enter printList\n");
 	while(curr->nodePtr != NULL){
 		count++;
-		printf("node# = %d, nodeVal = %d, nodeAddress = %p\n", count, curr->val, list.headPtr);
+		printf("node# = %d, nodeVal = %d, nodeAddress = %p\n", count, curr->val, curr);
 		curr = curr->nodePtr;
 	}
 	count++;
 	printf("node# = %d, nodeVal = %d, nodeAddress = %p\n", count, curr->val, curr);
-	printf("list.numNodes = %d, list iterations = %d\n", list.numNodes, count);
+	printf("list.numNodes = %d\n", list.numNodes);
 }
 
+// create a linkedList and then add two nodes and print the list data
 int main(){
-	//int x = 10;
-	//printf("address of x: %p", &x);
-	//printf("address on heap: %p", (int *) malloc(sizeof(int)));
 	linkedList list = initList();
-	addNodeEnd(list, 20);
-	addNodeEnd(list, 30);
+	addNodeEnd(&list, 20);
+	addNodeEnd(&list, 30);
 	printList(list);
 	return 0;
 }

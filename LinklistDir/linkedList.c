@@ -68,11 +68,33 @@ void printList(linkedList list){
 	printf("list.numNodes = %d\n", list.numNodes);
 }
 
+void removeNode(linkedList* list, int valIn){
+	printf("Removing first node with value %d\n", valIn);
+	node* prev = list->headPtr;
+	node* curr = prev->nodePtr;
+	while(curr != NULL){
+		if (curr->val == valIn){
+			free(prev->nodePtr);
+			prev->nodePtr = curr->nodePtr;
+			free(curr);
+			
+		}
+		prev = prev->nodePtr;
+	}
+
+}
+
+
+
 // create a linkedList and then add two nodes and print the list data
 int main(){
 	linkedList list = initList();
 	addNodeEnd(&list, 20);
 	addNodeEnd(&list, 30);
+	printList(list);
+	// TODO:
+	// remove element with value 20 in it
+	removeNode(&list, 20);
 	printList(list);
 	return 0;
 }
